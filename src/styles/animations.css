@@ -1,0 +1,167 @@
+/* Portfolio animations - use in MUI sx or className */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.35s ease-out forwards;
+}
+
+.animate-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 25%,
+    rgba(0, 0, 0, 0.12) 50%,
+    rgba(0, 0, 0, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* Subtle floating orbs – smooth, low opacity */
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.06; }
+  50% { transform: translate(30px, -20px); opacity: 0.1; }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.05; }
+  50% { transform: translate(-25px, 25px); opacity: 0.09; }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.04; }
+  50% { transform: translate(15px, 15px); opacity: 0.08; }
+}
+
+@keyframes float4 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.05; }
+  50% { transform: translate(-20px, -15px); opacity: 0.08; }
+}
+
+/* Hero corner content – gentle floating */
+@keyframes heroCornerFloat {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(4px, -6px); }
+  50% { transform: translate(-3px, 4px); }
+  75% { transform: translate(5px, 3px); }
+}
+
+.hero-corner-float {
+  animation: heroCornerFloat 6s ease-in-out infinite;
+}
+
+.hero-corner-float-delay {
+  animation-delay: 1.5s;
+}
+
+.hero-corner-float-delay-2 {
+  animation-delay: 3s;
+}
+
+.hero-corner-float-delay-3 {
+  animation-delay: 4.5s;
+}
+
+/* Content area background – separate from hero */
+@keyframes contentFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  33% { transform: translate(-20px, 15px) scale(1.02); opacity: 0.8; }
+  66% { transform: translate(10px, -10px) scale(0.98); opacity: 0.5; }
+}
+
+@keyframes contentFloat2 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  50% { transform: translate(25px, -20px); opacity: 0.75; }
+}
+
+@keyframes contentPulse {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.7; transform: translateX(-50%) scale(1.08); }
+}
+
+@keyframes contentMeshMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 32px 32px; }
+}
+
+/* Project / proposal modal – modern enter animation */
+@keyframes modalBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPanelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-panel {
+  animation: modalPanelIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

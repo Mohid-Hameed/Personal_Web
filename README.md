@@ -20,6 +20,21 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Project structure (Portfolio)
+
+- `src/app/` – Next.js App Router: `layout.js`, `page.js`, `globals.css`
+- `src/components/` – UI:
+  - `layout/` – `Header`, `Footer`, `PortfolioLayout`
+  - `portfolio/` – `Hero`, `SectionCard`, `PortfolioContent`, `sections/` (Summary, Experience, Education, Skills, Projects, Contact)
+  - `common/` – `SectionSkeleton`, `ListSectionSkeleton`, `HeroSkeleton`, `LazySection`
+  - `providers/` – `ThemeRegistry` (MUI cache + `PortfolioProvider`)
+- `src/context/` – `PortfolioContext` (portfolio data + theme)
+- `src/hooks/` – `usePortfolioData` (fetches from API or uses demo data)
+- `src/lib/` – `api.js` (fetch portfolio + theme from backend)
+- `src/theme/` – `createTheme.js` (MUI theme from backend theme payload)
+- `src/constants/` – `DEMO_PORTFOLIO_DATA` (set and use for demo until backend is ready)
+- `src/styles/` – `animations.css` (fadeInUp, shimmer, stagger)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

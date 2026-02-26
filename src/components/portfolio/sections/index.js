@@ -1,0 +1,12 @@
+export { default as SummarySection } from './SummarySection';
+export { default as CoverLetterSection } from './CoverLetterSection';
+export { default as ExperienceSection } from './ExperienceSection';
+export { default as EducationSection } from './EducationSection';
+export { default as SkillsSection } from './SkillsSection';
+export { default as PortfolioSection } from './PortfolioSection';
+export { default as ProjectsSection } from './ProjectsSection';
+export { default as CertificationsSection } from './CertificationsSection';
+export { default as BlogSection } from './BlogSection';
+export { default as PricingSection } from './PricingSection';
+export { default as InterestsSection } from './InterestsSection';
+export { default as ContactSection } from './ContactSection';
