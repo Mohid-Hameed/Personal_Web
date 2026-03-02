@@ -179,7 +179,7 @@ I am lawfully authorized to work in the United States and currently based in Mic
     title: 'Certifications',
     items: [
       { id: '1', name: 'Full-Stack Development', issuer: 'Octek', year: '2025', imageUrl: null },
-      { id: '2', name: 'React Native & Mobile Development', issuer: 'Codenax', year: '2023', imageUrl: null, documentUrl: '/api/experience-letter' },
+      { id: '2', name: 'React Native & Mobile Development', issuer: 'Codenax', year: '2023', imageUrl: null, documentUrl: 'experience-letter.pdf' },
       { id: '3', name: 'REST APIs & Backend Systems', issuer: 'Professional', year: '2024', imageUrl: null },
     ],
   },
