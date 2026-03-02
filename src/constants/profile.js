@@ -17,7 +17,7 @@ export const DEMO_PROFILE = {
   yearsExperience: 3,
   footerCopyright: `© ${new Date().getFullYear()} Mohid Hameed. All rights reserved.`,
   footerLinks: [
-    { label: 'LinkedIn', href: 'https://linkedin.com' },
-    { label: 'GitHub', href: 'https://github.com' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mohid-hameed-a92329187/' },
+    { label: 'GitHub', href: 'https://github.com/Mohid-Hameed' },
   ],
 };

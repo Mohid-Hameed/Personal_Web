@@ -61,7 +61,16 @@ export default function Footer({ profile }) {
                 startIcon={<PhoneIcon />}
                 color="primary"
                 size="small"
-                sx={{ justifyContent: 'flex-start', textTransform: 'none', px: 0, display: 'block', mb: 0.5 }}
+                sx={{
+                  justifyContent: 'flex-start',
+                  textTransform: 'none',
+                  px: 0,
+                  mt: 0.25,
+                  mb: 0.5,
+                  display: 'block',
+                  alignItems: 'center',
+                  whiteSpace: 'nowrap',
+                }}
               >
                 {phone}
               </Button>

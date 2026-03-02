@@ -93,7 +93,15 @@ export default function PortfolioContent({ profile, sections }) {
         <ContentBackground />
         <Container maxWidth="md" sx={{ position: 'relative', pt: { xs: 5, sm: 6, md: 8 }, px: { xs: 3, sm: 4, md: 5 }, pb: { xs: 4, md: 6 } }}>
           {sectionOrder.map((key) => (
-            <Box key={key} id={key} component="section" sx={{ scrollMarginTop: 80 }}>
+            <Box
+              key={key}
+              id={key}
+              component="section"
+              sx={{
+                // Header is fixed; give sections extra offset so headings never hide behind it.
+                scrollMarginTop: { xs: 96, sm: 104, md: 120 },
+              }}
+            >
               <SectionRenderer type={key} data={sectionData[key]} loading={false} profile={profile} />
             </Box>
           ))}
