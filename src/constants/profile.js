@@ -7,7 +7,7 @@ export const DEMO_PROFILE = {
   tagline: 'Fullstack Software Engineer',
   headline: 'Fullstack Software Engineer with 3+ years of experience',
   slogan: 'I build scalable software and ship it with care.',
-  imageUrl: '/final.png',
+  imageUrl: './final.png',
   coverImageUrl: null,
   location: 'Ada, Michigan',
   address: '5468 Longwood CT, Ada, Michigan',

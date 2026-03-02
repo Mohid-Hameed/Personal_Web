@@ -14,7 +14,7 @@ import { ListSectionSkeleton } from '../../common/SectionSkeleton';
 
 /**
  * Renders PDF as canvas (image-like) with no browser PDF toolbar – no download/print.
- * Scale to fit entire document in container – no scroll.
+ * Render at readable scale (fit width). The modal content scrolls to show full length.
  */
 function PdfCanvasViewer({ pdfUrl, containerRef }) {
   const [pages, setPages] = useState([]);
@@ -32,7 +32,7 @@ function PdfCanvasViewer({ pdfUrl, containerRef }) {
     (async () => {
       try {
         const pdfjs = await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+        pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs';
 
         const loadingTask = pdfjs.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
@@ -41,23 +41,11 @@ function PdfCanvasViewer({ pdfUrl, containerRef }) {
         const numPages = pdf.numPages;
         const container = containerRef.current;
         const containerWidth = Math.max(container.clientWidth || 0, 400);
-        const containerHeight = Math.max(container.clientHeight || 0, 400);
 
         const firstPage = await pdf.getPage(1);
         if (cancelled) return;
         const v1 = firstPage.getViewport({ scale: 1 });
-        let totalHeight = v1.height;
-        if (numPages > 1) {
-          for (let i = 2; i <= numPages; i++) {
-            const p = await pdf.getPage(i);
-            if (cancelled) return;
-            totalHeight += p.getViewport({ scale: 1 }).height;
-          }
-        }
-
-        const scaleW = containerWidth / v1.width;
-        const scaleH = containerHeight / totalHeight;
-        const scale = Math.min(scaleW, scaleH, 2);
+        const scale = Math.min(containerWidth / v1.width, 2);
 
         const pageCanvases = [];
         for (let i = 1; i <= numPages; i++) {
@@ -127,13 +115,12 @@ function PdfCanvasViewer({ pdfUrl, containerRef }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 0,
-        py: 1,
-        px: 1,
+        gap: 2,
+        py: 2,
+        px: { xs: 1, sm: 2 },
         userSelect: 'none',
         WebkitUserSelect: 'none',
-        overflow: 'hidden',
-        '& canvas': { display: 'block', flexShrink: 0 },
+        '& canvas': { display: 'block', maxWidth: '100%', height: 'auto' },
       }}
       onContextMenu={(e) => e.preventDefault()}
     >
@@ -185,7 +172,7 @@ function PdfModal({ open, onClose, pdfUrl, title }) {
         sx={{
           width: '100%',
           maxWidth: 900,
-          maxHeight: '90vh',
+          maxHeight: '92vh',
           bgcolor: 'background.paper',
           borderRadius: 3,
           border: '1px solid',
@@ -233,12 +220,9 @@ function PdfModal({ open, onClose, pdfUrl, title }) {
           sx={{
             flex: 1,
             minHeight: 0,
-            height: '75vh',
-            overflow: 'hidden',
+            overflow: 'auto',
             width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           {open && pdfUrl && <PdfCanvasViewer pdfUrl={pdfUrl} containerRef={containerRef} />}

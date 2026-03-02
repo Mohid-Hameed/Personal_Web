@@ -14,7 +14,7 @@ export default function PortfolioLayout() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
       <AnimatedBackground />
-      <Header title={profile?.name || 'Portfolio'} logoUrl="/name.png" />
+      <Header title={profile?.name || 'Portfolio'} logoUrl="./name.png" />
       <PortfolioContent profile={profile} sections={sections} />
       <Footer profile={profile} />
     </Box>
