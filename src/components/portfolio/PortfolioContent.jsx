@@ -1,6 +1,6 @@
 'use client';
 
-import { lazy, Suspense } from 'react';
+import { useCallback, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {
@@ -18,6 +18,11 @@ import {
 } from './sections';
 import Hero from './Hero';
 import ContentBackground from '../common/ContentBackground';
+import CustomCursorArea from '../common/CustomCursorArea';
+import Footer from '../layout/Footer';
+import { useAppReady } from '../../context/AppReadyContext';
+import { usePortfolio } from '../../context/PortfolioContext';
+import { useScroll } from '../../context/ScrollContext';
 
 const SECTION_MAP = {
   summary: SummarySection,
@@ -33,17 +38,35 @@ const SECTION_MAP = {
   interests: InterestsSection,
 };
 
-function SectionRenderer({ type, data, profile }) {
+function SectionRenderer({ type, data, profile, appReady }) {
   const Component = SECTION_MAP[type];
   if (!Component) return null;
   return (
-    <Box className="animate-fade-in-up" sx={{ mb: { xs: 4, md: 5 } }}>
+    <Box
+      className={appReady ? 'animate-fade-in-up' : 'section-entrance'}
+      sx={{ mb: { xs: 4, md: 5 } }}
+    >
       <Component data={data} loading={false} profile={type === 'summary' ? profile : undefined} />
     </Box>
   );
 }
 
+const SCROLL_PAST_HERO_THRESHOLD = 80;
+
 export default function PortfolioContent({ profile, sections }) {
+  const { appReady } = useAppReady();
+  const { profile: contextProfile } = usePortfolio();
+  const { setScrolledPastHero } = useScroll();
+  const scrollRef = useRef(null);
+
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollTop } = e.target;
+      setScrolledPastHero(scrollTop > SCROLL_PAST_HERO_THRESHOLD);
+    },
+    [setScrolledPastHero]
+  );
+
   const sectionOrder = sections?.order ?? [
     'summary',
     'coverLetter',
@@ -60,8 +83,8 @@ export default function PortfolioContent({ profile, sections }) {
   const sectionData = sections?.data ?? sections ?? {};
 
   return (
-    <Box component="main" sx={{ flex: 1, width: '100%', minWidth: 0, overflowX: 'hidden', position: 'relative' }}>
-      {/* Fixed hero: 80% viewport height, stays in place on scroll */}
+    <Box component="main" sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
+      {/* Hero: fixed so it never moves when scrolling */}
       <Box
         sx={{
           position: 'fixed',
@@ -77,35 +100,57 @@ export default function PortfolioContent({ profile, sections }) {
           <Hero profile={profile} loading={false} />
         </Box>
       </Box>
-      {/* Spacer so content starts after hero (80vh) */}
-      <Box sx={{ minHeight: '80vh', flexShrink: 0 }} aria-hidden />
-      {/* Scrolling content: rounded top corners, own background animation */}
+
+      {/* Scroll container: fixed size, scrollbar hidden, reports scroll for header */}
       <Box
+        ref={scrollRef}
+        onScroll={handleScroll}
         sx={{
-          position: 'relative',
-          zIndex: 1,
-          overflow: 'hidden',
-          borderTopLeftRadius: { xs: 32, md: 48 },
-          borderTopRightRadius: { xs: 32, md: 48 },
-          pb: 4,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          '&::-webkit-scrollbar': { display: 'none' },
         }}
       >
-        <ContentBackground />
-        <Container maxWidth="md" sx={{ position: 'relative', pt: { xs: 5, sm: 6, md: 8 }, px: { xs: 3, sm: 4, md: 5 }, pb: { xs: 4, md: 6 } }}>
-          {sectionOrder.map((key) => (
-            <Box
-              key={key}
-              id={key}
-              component="section"
-              sx={{
-                // Header is fixed; give sections extra offset so headings never hide behind it.
-                scrollMarginTop: { xs: 96, sm: 104, md: 120 },
-              }}
-            >
-              <SectionRenderer type={key} data={sectionData[key]} loading={false} profile={profile} />
-            </Box>
-          ))}
-        </Container>
+        <Box sx={{ minHeight: '100vh', height: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always', flexShrink: 0 }} aria-hidden />
+        <CustomCursorArea
+          sx={{
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            position: 'relative',
+            zIndex: 1,
+            overflow: 'hidden',
+            borderTopLeftRadius: { xs: 32, md: 48 },
+            borderTopRightRadius: { xs: 32, md: 48 },
+            pb: 4,
+          }}
+        >
+          <ContentBackground />
+          <Container maxWidth="md" sx={{ position: 'relative', pt: { xs: 7, sm: 8, md: 18 }, px: { xs: 3, sm: 4, md: 5 }, pb: { xs: 4, md: 6 } }}>
+            {sectionOrder.map((key) => (
+              <Box
+                key={key}
+                id={key}
+                component="section"
+                sx={{
+                  scrollMarginTop: { xs: 96, sm: 104, md: 120 },
+                }}
+              >
+                <SectionRenderer type={key} data={sectionData[key]} loading={false} profile={profile} appReady={appReady} />
+              </Box>
+            ))}
+          </Container>
+          <Footer profile={contextProfile ?? profile} />
+        </CustomCursorArea>
       </Box>
     </Box>
   );

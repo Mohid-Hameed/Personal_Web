@@ -11,8 +11,9 @@ export default function AnimatedBackground() {
       sx={{
         position: 'fixed',
         inset: 0,
-        zIndex: -1,
+        zIndex: 0,
         overflow: 'hidden',
+        pointerEvents: 'none',
         background: 'linear-gradient(160deg, #0d0d0d 0%, #1a0f0a 40%, #0d0d0d 70%, #1f1208 100%)',
       }}
     >

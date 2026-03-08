@@ -13,26 +13,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { NAV_SECTIONS, NAV_VISIBLE_IDS } from '../../constants';
-
-function ElevationScroll({ children }) {
-  const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 24 });
-  return React.cloneElement(children, {
-    elevation: 0,
-    sx: [
-      children.props.sx,
-      {
-        transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-        backgroundColor: trigger ? 'rgba(13, 13, 13, 0.92)' : 'transparent',
-        backdropFilter: trigger ? 'blur(12px)' : 'none',
-        boxShadow: trigger ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
-      },
-    ],
-  });
-}
+import { useScroll } from '../../context/ScrollContext';
 
 function scrollToSection(sectionId, onClose) {
   const el = document.getElementById(sectionId);
@@ -44,6 +28,7 @@ export default function Header({ title = 'Portfolio', logoUrl }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { scrolledPastHero } = useScroll();
 
   const navItems = NAV_VISIBLE_IDS
     .filter((id) => NAV_SECTIONS[id])
@@ -51,8 +36,20 @@ export default function Header({ title = 'Portfolio', logoUrl }) {
 
   return (
     <>
-      <ElevationScroll>
-        <AppBar position="fixed" enableColorOnDark sx={{ color: 'text.primary', zIndex: 1200 }}>
+      <AppBar
+        position="fixed"
+        enableColorOnDark
+        elevation={0}
+        sx={{
+          color: 'text.primary',
+          zIndex: 1200,
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease',
+          backgroundColor: scrolledPastHero ? 'rgba(13, 13, 13, 0.92)' : 'transparent',
+          backdropFilter: scrolledPastHero ? 'blur(12px)' : 'none',
+          WebkitBackdropFilter: scrolledPastHero ? 'blur(12px)' : 'none',
+          boxShadow: scrolledPastHero ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
+        }}
+      >
           <Toolbar
             sx={{
               gap: { xs: 0.5, sm: 1 },
@@ -129,7 +126,6 @@ export default function Header({ title = 'Portfolio', logoUrl }) {
             )}
           </Toolbar>
         </AppBar>
-      </ElevationScroll>
 
       <Drawer
         anchor="right"

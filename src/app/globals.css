@@ -28,6 +28,30 @@ a {
   text-decoration: none;
 }
 
+/* Clickable areas: hand cursor when native cursor is used */
+a,
+button,
+[role="button"],
+[data-clickable] {
+  cursor: pointer;
+}
+
+/* When custom cursor is active, never show browser pointer — only the app custom cursor (with hand icon over clickables) */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+[data-clickable] {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+[data-clickable]:hover {
+  opacity: 0.92;
+}
+[data-clickable]:active {
+  opacity: 1;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

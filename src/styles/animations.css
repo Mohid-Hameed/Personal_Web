@@ -1,4 +1,8 @@
-/* Portfolio animations - use in MUI sx or className */
+/* Portfolio animations - use in MUI sx or className
+ * Entrance animations (fade-in-up, fade-in, scale-in) set initial opacity/transform
+ * so content is never visible before the animation runs. New entrance animations
+ * should do the same: set the "from" state on the class so there is no flash.
+ */
 
 @keyframes fadeInUp {
   from {
@@ -40,16 +44,27 @@
   }
 }
 
+/* Section entrance: start hidden so content is never visible before animation */
 .animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(16px);
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .animate-fade-in {
+  opacity: 0;
   animation: fadeIn 0.4s ease-out forwards;
 }
 
 .animate-scale-in {
+  opacity: 0;
+  transform: scale(0.96);
   animation: scaleIn 0.35s ease-out forwards;
+}
+
+/* Base for custom section entrances: start hidden; add your own animation with same "from" state */
+.section-entrance {
+  opacity: 0;
 }
 
 .animate-skeleton {
@@ -164,4 +179,259 @@
 
 .animate-modal-panel {
   animation: modalPanelIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Hero load: image fades in from slightly above */
+@keyframes heroImageLoad {
+  from {
+    opacity: 0;
+    transform: translateY(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-image-load {
+  opacity: 0;
+  transform: translateY(-48px);
+  animation: heroImageLoad 1.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Hero text reveal: left-aligned text types left → right */
+@keyframes heroRevealLeft {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.92;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Hero text reveal: right-aligned text types right → left */
+@keyframes heroRevealRight {
+  from {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0.92;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.hero-reveal-left {
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  opacity: 0.92;
+  animation: heroRevealLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-reveal-right {
+  overflow: hidden;
+  clip-path: inset(0 0 0 100%);
+  opacity: 0.92;
+  animation: heroRevealRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Hero hidden until appReady – no flash before loading overlay is done */
+.hero-before-ready {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+/* Stagger hero text after image */
+.hero-reveal-left-delay-1 { animation-delay: 0.2s; }
+.hero-reveal-left-delay-2 { animation-delay: 0.4s; }
+.hero-reveal-right-delay-1 { animation-delay: 0.3s; }
+.hero-reveal-right-delay-2 { animation-delay: 0.5s; }
+
+/* ========== Loading overlay (initial page load) ========== */
+@property --loading-hole {
+  syntax: "<length-percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+/* Single full-screen layer: black everywhere, transparent only in the expanding hole */
+.loading-overlay {
+  --loading-hole: 0%;
+  --loading-bar-color: #e65100;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Black background covers entire viewport; mask defines the transparent hole */
+  background: var(--loading-overlay-bg, #0d0d0d);
+  color: #9e9e9e;
+  font-size: 35px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  pointer-events: none;
+  visibility: visible;
+  opacity: 1;
+  isolation: isolate;
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  /* Same space for black and transparent: mask cuts the hole from the same layer */
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--loading-hole),
+    black var(--loading-hole)
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--loading-hole),
+    black var(--loading-hole)
+  );
+  mask-size: 100% 100%;
+  mask-position: center;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center;
+}
+
+@keyframes loadingOverlayReveal {
+  to {
+    --loading-hole: 150%;
+  }
+}
+
+.loading-overlay--reveal {
+  animation: loadingOverlayReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.loading-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* Oval container: pill shape with border, text on top, orange fill from bottom */
+.loading-overlay__oval {
+  position: relative;
+  width: min(280px, 85vw);
+  height: 100px;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+  z-index: 1;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Same duration as overlay reveal (0.9s) so oval and expand run in sync */
+@keyframes loadingOvalHide {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.loading-overlay__oval--hide {
+  animation: loadingOvalHide 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+/* Liquid fill: gradient for depth + wavy surface */
+.loading-overlay__oval-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0%;
+  /* Darker at bottom, base in middle, slight highlight at top – liquid depth */
+  background: linear-gradient(
+    180deg,
+    rgba(180, 60, 0, 0.95) 0%,
+    var(--loading-bar-color, #e65100) 40%,
+    rgba(255, 140, 80, 0.9) 100%
+  );
+  border-radius: 0 0 9999px 9999px;
+  animation: loadingOvalFill 2s cubic-bezier(0.33, 1, 0.28, 1) forwards;
+  overflow: visible;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Wavy liquid surface highlight at the top – seamless loop to avoid direction flip glitch */
+.loading-overlay__oval-fill::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 100%;
+  width: 104%;
+  height: 14px;
+  margin-bottom: -1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 160, 100, 0.6) 40%,
+    rgba(255, 180, 120, 0.85) 100%
+  );
+  border-radius: 50%;
+  clip-path: ellipse(52% 100% at 50% 100%);
+  animation: liquidWave 2s ease-in-out infinite;
+  opacity: 0.9;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@keyframes loadingOvalFill {
+  to {
+    height: 100%;
+    border-radius: 9999px;
+  }
+}
+
+/* Seamless loop: 0% and 100% match so no jump when animation restarts */
+@keyframes liquidWave {
+  0%, 100% {
+    transform: scaleX(0.99) translateY(0);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scaleX(1.01) translateY(-1px);
+    opacity: 0.94;
+  }
+}
+
+.loading-overlay__oval-text {
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 28px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Metal-collision sparks: particles fly out with gravity, then fade (--spark-tx, --spark-ty in px) */
+@keyframes metalSpark {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--spark-tx, 0), var(--spark-ty, 0)) scale(0.3);
+  }
 }

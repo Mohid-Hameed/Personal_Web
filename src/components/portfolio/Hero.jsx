@@ -3,10 +3,12 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { HeroSkeleton } from "../common/SectionSkeleton";
+import { useAppReady } from "../../context/AppReadyContext";
 
 const contentShadow = "0 1px 3px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.4)";
 
 export default function Hero({ profile, loading }) {
+  const { appReady } = useAppReady();
   if (loading) return <HeroSkeleton />;
   if (!profile) return null;
 
@@ -20,10 +22,12 @@ export default function Hero({ profile, loading }) {
 
   return (
     <Box
-      className="animate-fade-in"
+      className={appReady ? "animate-fade-in" : "hero-before-ready"}
       sx={{
         position: "relative",
-        minHeight: "80%",
+        minHeight: "90vh",
+        visibility: appReady ? "visible" : "hidden",
+        opacity: appReady ? undefined : 0,
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "1fr auto 1fr" },
         gridTemplateRows: {
@@ -39,7 +43,6 @@ export default function Hero({ profile, loading }) {
         marginTop: "100px",
       }}
     >
-      {/* Center image: position absolute, behind content, responsive */}
       {imageUrl && (
         <Box
           sx={{
@@ -57,21 +60,25 @@ export default function Hero({ profile, loading }) {
           }}
         >
           <Box
-            component="img"
-            src={imageUrl}
-            alt={name}
-            sx={{
-              display: "block",
-              maxWidth: "min(85vw, 820px)",
-              width: "auto",
-              height: "auto",
-              maxHeight: "min(75vh, 880px)",
-              objectFit: "contain",
-            }}
-          />
+            className={appReady ? "hero-image-load" : ""}
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <Box
+              component="img"
+              src={imageUrl}
+              alt={name}
+              sx={{
+                display: "block",
+                maxWidth: "min(85vw, 820px)",
+                width: "auto",
+                height: "auto",
+                maxHeight: "min(75vh, 880px)",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
         </Box>
       )}
-      {/* Top left */}
       <Box
         className="hero-corner-float"
         sx={{
@@ -82,23 +89,24 @@ export default function Hero({ profile, loading }) {
           textAlign: { xs: "center", md: "left" },
         }}
       >
-        <Typography
-          variant="h2"
-          fontWeight={800}
-          sx={{
-            fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3.5rem" },
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            wordBreak: "break-word",
-            color: "text.primary",
-            textShadow: contentShadow,
-          }}
-        >
-          Hey there, I&apos;m {name.split(" ")[0] || name}
-        </Typography>
+        <Box className={appReady ? "hero-reveal-left hero-reveal-left-delay-1" : ""}>
+          <Typography
+            variant="h2"
+            fontWeight={800}
+            sx={{
+              fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3.5rem" },
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              wordBreak: "break-word",
+              color: "text.primary",
+              textShadow: contentShadow,
+            }}
+          >
+            Hey there, I&apos;m {name.split(" ")[0] || name}
+          </Typography>
+        </Box>
       </Box>
 
-      {/* Top right: slogan */}
       <Box
         className="hero-corner-float hero-corner-float-delay"
         sx={{
@@ -107,25 +115,25 @@ export default function Hero({ profile, loading }) {
           gridColumn: { xs: 1, md: 3 },
           gridRow: { xs: 2, md: 1 },
           textAlign: { xs: "center", md: "right" },
-          // maxWidth: 320,
           justifySelf: { md: "end" },
         }}
       >
-        <Typography
-          variant="h6"
-          color="text.main"
-          sx={{
-            fontFamily: "var(--font-playfair), Georgia, serif",
-            fontStyle: "italic",
-            lineHeight: 1.5,
-            textShadow: contentShadow,
-          }}
-        >
-          {slogan}
-        </Typography>
+        <Box className={appReady ? "hero-reveal-right hero-reveal-right-delay-1" : ""}>
+          <Typography
+            variant="h6"
+            color="text.main"
+            sx={{
+              fontFamily: "var(--font-playfair), Georgia, serif",
+              fontStyle: "italic",
+              lineHeight: 1.5,
+              textShadow: contentShadow,
+            }}
+          >
+            {slogan}
+          </Typography>
+        </Box>
       </Box>
 
-      {/* Center: spacer when image is absolute, or fallback when no image */}
       {imageUrl ? (
         <Box
           sx={{
@@ -170,7 +178,6 @@ export default function Hero({ profile, loading }) {
         </Box>
       )}
 
-      {/* Bottom left */}
       <Box
         className="hero-corner-float hero-corner-float-delay-2"
         sx={{
@@ -185,43 +192,44 @@ export default function Hero({ profile, loading }) {
           justifyContent: { xs: "center", md: "flex-start" },
         }}
       >
-        <Typography
-          variant="h2"
-          fontWeight={800}
-          color="primary.main"
-          sx={{
-            fontSize: { xs: "3rem", sm: "3.5rem", md: "5rem" },
-            lineHeight: 1,
-            textShadow: contentShadow,
-          }}
-        >
-          {years}+
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-          }}
-        >
+        <Box className={appReady ? "hero-reveal-left hero-reveal-left-delay-2" : ""} sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", justifyContent: { xs: "center", md: "flex-start" } }}>
           <Typography
-            variant="body1"
-            fontWeight={600}
-            sx={{ color: "text.primary", textShadow: contentShadow }}
+            variant="h2"
+            fontWeight={800}
+            color="primary.main"
+            sx={{
+              fontSize: { xs: "3rem", sm: "3.5rem", md: "5rem" },
+              lineHeight: 1,
+              textShadow: contentShadow,
+            }}
           >
-            years
+            {years}+
           </Typography>
-          <Typography
-            variant="body1"
-            fontWeight={600}
-            sx={{ color: "text.primary", textShadow: contentShadow }}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
           >
-            experience
-          </Typography>
+            <Typography
+              variant="body1"
+              fontWeight={600}
+              sx={{ color: "text.primary", textShadow: contentShadow }}
+            >
+              years
+            </Typography>
+            <Typography
+              variant="body1"
+              fontWeight={600}
+              sx={{ color: "text.primary", textShadow: contentShadow }}
+            >
+              experience
+            </Typography>
+          </Box>
         </Box>
       </Box>
 
-      {/* Bottom right */}
       <Box
         className="hero-corner-float hero-corner-float-delay-3"
         sx={{
@@ -233,14 +241,16 @@ export default function Hero({ profile, loading }) {
           justifySelf: { md: "end" },
         }}
       >
-        <Typography
-          variant="h6"
-          fontWeight={600}
-          color="text.primary"
-          sx={{ textShadow: contentShadow }}
-        >
-          {tagline}
-        </Typography>
+        <Box className={appReady ? "hero-reveal-right hero-reveal-right-delay-2" : ""}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            color="text.primary"
+            sx={{ textShadow: contentShadow }}
+          >
+            {tagline}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

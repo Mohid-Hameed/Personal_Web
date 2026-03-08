@@ -31,7 +31,7 @@ const PortfolioLayout = dynamic(
 
 export default function Home() {
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ height: '100vh', overflow: 'hidden' }}>
       <PortfolioLayout />
     </div>
   );
