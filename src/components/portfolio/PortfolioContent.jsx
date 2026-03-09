@@ -135,7 +135,7 @@ export default function PortfolioContent({ profile, sections }) {
           }}
         >
           <ContentBackground />
-          <Container maxWidth="md" sx={{ position: 'relative', pt: { xs: 7, sm: 8, md: 18 }, px: { xs: 3, sm: 4, md: 5 }, pb: { xs: 4, md: 6 } }}>
+          <Container maxWidth="md" sx={{ position: 'relative', pt: 18, px: { xs: 3, sm: 4, md: 5 }, pb: { xs: 4, md: 6 } }}>
             {sectionOrder.map((key) => (
               <Box
                 key={key}

@@ -97,7 +97,9 @@ export default function CustomCursorArea({ children, sx = {} }) {
   }, []);
 
   const handlePointerDown = useCallback((e) => {
-    if (!hasHover || !isActive) return;
+    const x = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+    const y = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+    if (typeof x !== 'number' || typeof y !== 'number') return;
     const id = ++sparkIdRef.current;
     const particles = Array.from({ length: SPARK_COUNT }, () => {
       const angle = (Math.random() * 360 * Math.PI) / 180;
@@ -107,11 +109,11 @@ export default function CustomCursorArea({ children, sx = {} }) {
       const ty = Math.sin(angle) * dist + gravity;
       return { tx, ty, delay: Math.random() * 45, size: 2 + Math.random() * 3 };
     });
-    setSparks((s) => [...s, { id, x: e.clientX, y: e.clientY, particles }]);
+    setSparks((s) => [...s, { id, x, y, particles }]);
     setTimeout(() => {
       setSparks((s) => s.filter((x) => x.id !== id));
     }, SPARK_DURATION_MS + 80);
-  }, [hasHover, isActive]);
+  }, []);
 
   useEffect(() => {
     if (!isActive || !hasHover) return;
@@ -160,6 +162,57 @@ export default function CustomCursorArea({ children, sx = {} }) {
       }}
     >
       {children}
+
+      {/* Spark overlay: show on tap/click for all devices (mobile, tablet, desktop) */}
+      {sparks.length > 0 && (
+        <Box
+          sx={{
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            width: '100vw',
+            height: '100vh',
+            pointerEvents: 'none',
+            zIndex: 9999,
+          }}
+        >
+          {sparks.map(({ id, x, y, particles }) => (
+            <Box
+              key={id}
+              className="cursor-spark-burst"
+              sx={{
+                position: 'fixed',
+                left: x,
+                top: y,
+                width: 1,
+                height: 1,
+                transform: 'translate(-50%, -50%)',
+                pointerEvents: 'none',
+              }}
+            >
+              {particles?.map((p, i) => (
+                <Box
+                  key={i}
+                  className="metal-spark-particle"
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    width: p.size,
+                    height: p.size,
+                    borderRadius: '50%',
+                    background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,220,150,0.9) 40%, rgba(255,140,50,0.7) 70%, rgba(${THEME_PRIMARY}, 0.4))`,
+                    boxShadow: `0 0 ${p.size * 2}px rgba(255,180,80,0.6), 0 0 ${p.size}px rgba(255,255,255,0.8)`,
+                    '--spark-tx': `${p.tx}px`,
+                    '--spark-ty': `${p.ty}px`,
+                    animation: `metalSpark ${SPARK_DURATION_MS}ms ease-out ${p.delay}ms forwards`,
+                  }}
+                />
+              ))}
+            </Box>
+          ))}
+        </Box>
+      )}
 
       {showCursor && (
         <Box
@@ -233,42 +286,6 @@ export default function CustomCursorArea({ children, sx = {} }) {
             )}
           </Box>
 
-          {/* Metal-collision sparks */}
-          {sparks.map(({ id, x, y, particles }) => (
-            <Box
-              key={id}
-              className="cursor-spark-burst"
-              sx={{
-                position: 'fixed',
-                left: x,
-                top: y,
-                width: 1,
-                height: 1,
-                transform: 'translate(-50%, -50%)',
-                pointerEvents: 'none',
-              }}
-            >
-              {particles?.map((p, i) => (
-                <Box
-                  key={i}
-                  className="metal-spark-particle"
-                  sx={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    width: p.size,
-                    height: p.size,
-                    borderRadius: '50%',
-                    background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,220,150,0.9) 40%, rgba(255,140,50,0.7) 70%, rgba(${THEME_PRIMARY}, 0.4))`,
-                    boxShadow: `0 0 ${p.size * 2}px rgba(255,180,80,0.6), 0 0 ${p.size}px rgba(255,255,255,0.8)`,
-                    '--spark-tx': `${p.tx}px`,
-                    '--spark-ty': `${p.ty}px`,
-                    animation: `metalSpark ${SPARK_DURATION_MS}ms ease-out ${p.delay}ms forwards`,
-                  }}
-                />
-              ))}
-            </Box>
-          ))}
         </Box>
       )}
     </Box>
