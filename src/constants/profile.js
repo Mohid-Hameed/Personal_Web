@@ -12,7 +12,7 @@ export const DEMO_PROFILE = {
   location: 'Ada, Michigan',
   address: '5468 Longwood CT, Ada, Michigan',
   workAuthorization: 'Permanent Resident – Authorized to work in the United States',
-  email: 'mohidhameed76@gmail.com',
+  email: 'mr.mohid.hameed@gmail.com',
   phone: '+1 (616) 315-8147',
   yearsExperience: 3,
   footerCopyright: `© ${new Date().getFullYear()} Mohid Hameed. All rights reserved.`,

@@ -212,7 +212,7 @@ I am lawfully authorized to work in the United States and currently based in Mic
   contact: {
     title: 'Contact',
     items: [
-      { type: 'email', href: 'mailto:mohidhameed76@gmail.com', label: 'mohidhameed76@gmail.com' },
+      { type: 'email', href: 'mailto:mr.mohid.hameed@gmail.com', label: 'mr.mohid.hameed@gmail.com' },
       { type: 'phone', href: 'tel:+16163158147', label: '+1 (616) 315-8147' },
       { type: 'linkedin', href: 'https://linkedin.com', label: 'LinkedIn' },
       { type: 'website', href: 'https://github.com', label: 'GitHub' },
