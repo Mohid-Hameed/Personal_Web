@@ -1,4 +1,5 @@
 export { default as SummarySection } from './SummarySection';
+export { default as ResumeSection } from './ResumeSection';
 export { default as CoverLetterSection } from './CoverLetterSection';
 export { default as ExperienceSection } from './ExperienceSection';
 export { default as EducationSection } from './EducationSection';

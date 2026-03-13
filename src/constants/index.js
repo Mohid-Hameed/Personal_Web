@@ -19,6 +19,7 @@ export { DEMO_SECTIONS_ORDER, DEMO_SECTIONS_DATA } from './sections';
 /** Section id -> nav label for header scroll buttons */
 export const NAV_SECTIONS = {
   summary: 'Summary',
+  resume: 'Resume',
   coverLetter: 'Cover Letter',
   experience: 'Experience',
   education: 'Education',
@@ -34,6 +35,7 @@ export const NAV_SECTIONS = {
 
 /** Only these sections appear in the navbar (important ones) */
 export const NAV_VISIBLE_IDS = [
+  'resume',
   'experience',
   'skills',
   'portfolio',

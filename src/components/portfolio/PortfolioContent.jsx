@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {
   SummarySection,
+  ResumeSection,
   CoverLetterSection,
   ExperienceSection,
   EducationSection,
@@ -26,6 +27,7 @@ import { useScroll } from '../../context/ScrollContext';
 
 const SECTION_MAP = {
   summary: SummarySection,
+  resume: ResumeSection,
   coverLetter: CoverLetterSection,
   experience: ExperienceSection,
   education: EducationSection,
@@ -69,6 +71,7 @@ export default function PortfolioContent({ profile, sections }) {
 
   const sectionOrder = sections?.order ?? [
     'summary',
+    'resume',
     'coverLetter',
     'experience',
     'education',

@@ -160,6 +160,30 @@
   100% { background-position: 32px 32px; }
 }
 
+/* Resume section – orange balls drifting (smooth movement, no flashing) */
+@keyframes resumeOrbMove1 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(50px, -20px); }
+  50% { transform: translate(30px, 40px); }
+  75% { transform: translate(-40px, 15px); }
+}
+
+@keyframes resumeOrbMove2 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-45px, -25px); }
+  66% { transform: translate(-20px, 35px); }
+}
+
+@keyframes resumeOrbMove3 {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(calc(-50% + 60px), calc(-50% - 40px)); }
+}
+
+@keyframes resumeCardFloat {
+  0%, 100% { transform: translateY(0); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25); }
+  50% { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(230, 81, 0, 0.12); }
+}
+
 /* Project / proposal modal – modern enter animation */
 @keyframes modalBackdropIn {
   from { opacity: 0; }

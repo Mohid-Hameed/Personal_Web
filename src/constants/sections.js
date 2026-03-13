@@ -4,6 +4,7 @@
 
 export const DEMO_SECTIONS_ORDER = [
   'summary',
+  'resume',
   'coverLetter',
   'experience',
   'education',
@@ -20,6 +21,13 @@ export const DEMO_SECTIONS_DATA = {
   summary: {
     title: 'Summary',
     content: `Fullstack Software Engineer with 3+ years of experience building scalable backend services and high-performance web applications. Expert in JavaScript, TypeScript, React, SQL, and backend frameworks including Node.js and FastAPI, with a proven track record of developing secure REST APIs and optimizing system reliability for mission-critical platforms. Focused on driving product safety and minimizing financial risk through robust Object-Oriented Programming (OOP) and collaborative engineering practices. Lawfully authorized to work in the US.`,
+  },
+
+  resume: {
+    title: 'Resume',
+    subtitle: 'Download my resume',
+    downloadUrl: '/Mohid_Hameed_Resume.pdf',
+    downloadLabel: 'Download Resume',
   },
 
   coverLetter: {
