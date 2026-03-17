@@ -26,7 +26,8 @@ export const DEMO_SECTIONS_DATA = {
   resume: {
     title: 'Resume',
     subtitle: 'Download my resume',
-    downloadUrl: '/Mohid_Hameed_Resume.pdf',
+    // Use a relative URL so it works on GitHub Pages basePath (/<repo>/...)
+    downloadUrl: 'Mohid_Hameed_Resume.pdf',
     downloadLabel: 'Download Resume',
   },
 

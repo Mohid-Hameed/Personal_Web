@@ -14,6 +14,10 @@ export default function ResumeSection({ data, loading }) {
   const subtitle = data?.subtitle ?? 'Download my resume';
   const downloadUrl = data?.downloadUrl ?? '/resume.pdf';
   const downloadLabel = data?.downloadLabel ?? 'Download Resume';
+  const resolvedHref = downloadUrl?.startsWith('http')
+    ? downloadUrl
+    : `./${String(downloadUrl || 'resume.pdf').replace(/^\//, '')}`;
+  const downloadName = String(downloadUrl || 'resume.pdf').split('/').pop() || 'resume.pdf';
 
   return (
     <Box className="animate-fade-in-up">
@@ -131,10 +135,8 @@ export default function ResumeSection({ data, loading }) {
 
           <Button
             component="a"
-            href={downloadUrl}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
+            href={resolvedHref}
+            download={downloadName}
             variant="contained"
             color="primary"
             size="large"
